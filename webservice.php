@@ -1,126 +1,76 @@
-<!DOCTYPE html>
-<html >
-<head>
-	<title>Webservice</title>
-	<script src="https://js.stripe.com/v3/"></script>
-</head>
-<body>
-	<style type="text/css">
-		.StripeElement {
-  box-sizing: border-box;
+<table>
+    <tr>
+        <td>Name: </td>
+        <td><input id="name" type="text"></td>
+    </tr>
+    <tr>
+        <td>Email: </td>
+        <td><input id="email" type="text"></td>
+    </tr>
+    <tr>
+        <td>Credit Card Number: </td>
+        <td><input id="cc-number" type="text"></td>
+    </tr>
+    <tr>
+        <td>Expiration Month: </td>
+        <td><input id="cc-month" type="text"></td>
+    </tr>
+    <tr>
+        <td>Expiration Year: </td>
+        <td><input id="cc-year" type="text"></td>
+    </tr>
+    <tr>
+        <td>CVV: </td>
+        <td><input id="cc-cvv" type="text"></td>
+    </tr>
+    <tr>
+        <td>Postal Code: </td>
+        <td><input id="postal_code" type="text"></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><input type="submit" name="Submit" value="Submit" id="cc-submit"></td>
+    </tr>
+</table>
 
-  height: 40px;
-
-  padding: 10px 12px;
-
-  border: 1px solid transparent;
-  border-radius: 4px;
-  background-color: white;
-
-  box-shadow: 0 1px 3px 0 #e6ebf1;
-  -webkit-transition: box-shadow 150ms ease;
-  transition: box-shadow 150ms ease;
-}
-
-.StripeElement--focus {
-  box-shadow: 0 1px 3px 0 #cfd7df;
-}
-
-.StripeElement--invalid {
-  border-color: #fa755a;
-}
-
-.StripeElement--webkit-autofill {
-  background-color: #fefde5 !important;
-}
-	</style>
-	<form action="Debita.php" method="post" id="payment-form">
-  <div class="form-row">
-    <label for="card-element">
-      Credit or debit card
-    </label>
-    <div id="card-element">
-      <!-- A Stripe Element will be inserted here. -->
-    </div>
-
-    <!-- Used to display form errors. -->
-    <div id="card-errors" role="alert"></div>
-  </div>
-
-  <button>Submit Payment</button>
-</form>
-
+<script type="text/javascript" src="https://static.wepay.com/min/js/tokenization.3.latest.js"></script>
 <script type="text/javascript">
-	// Create a Stripe client.
-var stripe = Stripe('pk_live_0qn5Lyu6Smg6kBldEKk2Si5l');
-
-// Create an instance of Elements.
-var elements = stripe.elements();
-
-// Custom styling can be passed to options when creating an Element.
-// (Note that this demo uses a wider set of styles than the guide below.)
-var style = {
-  base: {
-    color: '#32325d',
-    fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-    fontSmoothing: 'antialiased',
-    fontSize: '16px',
-    '::placeholder': {
-      color: '#aab7c4'
-    }
-  },
-  invalid: {
-    color: '#fa755a',
-    iconColor: '#fa755a'
-  }
-};
-
-// Create an instance of the card Element.
-var card = elements.create('card', {style: style});
-
-// Add an instance of the card Element into the `card-element` <div>.
-card.mount('#card-element');
-
-// Handle real-time validation errors from the card Element.
-card.addEventListener('change', function(event) {
-  var displayError = document.getElementById('card-errors');
-  if (event.error) {
-    displayError.textContent = event.error.message;
-  } else {
-    displayError.textContent = '';
-  }
-});
-
-// Handle form submission.
-var form = document.getElementById('payment-form');
-form.addEventListener('submit', function(event) {
-  event.preventDefault();
-
-  stripe.createToken(card).then(function(result) {
-    if (result.error) {
-      // Inform the user if there was an error.
-      var errorElement = document.getElementById('card-errors');
-      errorElement.textContent = result.error.message;
-    } else {
-      // Send the token to your server.
-      stripeTokenHandler(result.token);
-    }
-  });
-});
-
-// Submit the form with the token ID.
-function stripeTokenHandler(token) {
-  // Insert the token ID into the form so it gets submitted to the server
-  var form = document.getElementById('payment-form');
-  var hiddenInput = document.createElement('input');
-  hiddenInput.setAttribute('type', 'hidden');
-  hiddenInput.setAttribute('name', 'stripeToken');
-  hiddenInput.setAttribute('value', token.id);
-  form.appendChild(hiddenInput);
-
-  // Submit the form
-  form.submit();
-}
+(function() {
+    WePay.set_endpoint("production"); // change to "production" when live
+    // Shortcuts
+    var d = document;
+        d.id = d.getElementById,
+        valueById = function(id) {
+            return d.id(id).value;
+        };
+    // For those not using DOM libraries
+    var addEvent = function(e,v,f) {
+        if (!!window.attachEvent) { e.attachEvent('on' + v, f); }
+        else { e.addEventListener(v, f, false); }
+    };
+    // Attach the event to the DOM
+    addEvent(d.id('cc-submit'), 'click', function() {
+        var userName = [valueById('name')].join(' ');
+            response = WePay.credit_card.create({
+            "client_id":        118711,
+            "user_name":        valueById('name'),
+            "email":            valueById('email'),
+            "cc_number":        valueById('cc-number'),
+            "cvv":              valueById('cc-cvv'),
+            "expiration_month": valueById('cc-month'),
+            "expiration_year":  valueById('cc-year'),
+            "address": {
+                "postal_code": valueById('postal_code')
+            }
+        }, function(data) {
+            if (data.error) {
+                console.log(data);
+                // handle error response
+            } else {
+                // call your own app's API to save the token inside the data;
+                // show a success page
+            }
+        });
+    });
+})();
 </script>
-</body>
-</html>
