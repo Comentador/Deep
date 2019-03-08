@@ -52,7 +52,7 @@
     addEvent(d.id('cc-submit'), 'click', function() {
         var userName = [valueById('name')].join(' ');
             response = WePay.credit_card.create({
-            "client_id":        118711,
+            "client_id":        99163,
             "user_name":        valueById('name'),
             "email":            valueById('email'),
             "cc_number":        valueById('cc-number'),
@@ -69,6 +69,7 @@
             } else {
                 // call your own app's API to save the token inside the data;
                 // show a success page
+                
             }
         });
     });
