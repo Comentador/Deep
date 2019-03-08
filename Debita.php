@@ -1,4 +1,3 @@
-
 <?php
 // WePay PHP SDK - http://git.io/mY7iQQ
 require 'wepay.php';
