@@ -7,7 +7,7 @@ $client_id     = 99163;
 $client_secret = "19e7fbcb24";
 $access_token  = "PRODUCTION_ac68324ea6df6e0b85ae5e61a32793e05cde230e34b92b4f6365807bdd0d91e9";
 // credit card id to charge
-$credit_card_id = 99163;
+$credit_card_id = 213252971;
 // change to useProduction for live environments
 Wepay::useProduction($client_id, $client_secret);
 $wepay = new WePay($access_token);
