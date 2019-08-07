@@ -3,7 +3,7 @@
         session_start();
     }
 
-    if(session_id()==""){
+    if(session_id()!=""){
         $_SESSION["username"] = "Humberto";
     }
 
