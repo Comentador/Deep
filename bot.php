@@ -1,6 +1,7 @@
 <?php
     if(session_id() == ""){
         session_start();
+        $_SESSION["username"] = "Humberto";
     }
 
     require "BotC.php";
@@ -36,7 +37,7 @@
     }
     else if($opc["texto"] === "/tool"){
         $motor->sendInline($opc, "Testando o callback", $strings->fala["botoes"]);
-        $motor->sendMessage($opc, $opc["message_id"]);
+        $motor->sendMessage($opc, $_SESSION['username']);
     }
 
 ?>
