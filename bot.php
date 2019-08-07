@@ -31,7 +31,7 @@
     }
 
     if($opc['texto'] === "/start"){
-        $motor->sendMessage($opc, $opc['first_name']);
+        $motor->sendMessage($opc, $opc['user']);
         
     }
     else if($opc["texto"] === "/tool"){
