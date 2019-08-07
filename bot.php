@@ -3,10 +3,6 @@
         session_start();
     }
 
-    if(session_id()!=""){
-        $_SESSION["username"] = "Humberto";
-    }
-
     require "BotC.php";
 
     define("BOT_TOKEN", "876737706:AAEaTouyw83yoHNP7s0gfmcRvx2b-vI9YbA");
