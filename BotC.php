@@ -8,14 +8,14 @@ class Divulga{
 
 	public function __construct(){
 		$this->str = new Strings();
-		/*try{
+		try{
 
-			$this->db = new PDO("mysql:dbname=mozdev;host=35.178.176.93", "root", "dados123");
+			$this->db = new PDO("mysql:dbname=sendtomyemail;host=", "comentador", "humdados123456");
 			
 
 		}catch(PDOexception $e){
 			return $e->getMessage();
-		}*/
+		}
 	}
 
 	protected function apiRequest($metodo, $parametro){
@@ -105,47 +105,74 @@ class Divulga{
 
 	public function saveID($id){
 
-		$abertura = fopen("id.txt", "w+");
-		$conteudo = $id;
-		$escrita = fwrite($abertura, $conteudo);
-		fclose($abertura);
+		$sql = $this->db->prepare("UPDATE mensagem SET msg_id=:msg WHERE id=:id");
+		$sql->bindValue(":msg", $id);
+		$sql->bindValue(":id", 1);
+		$sql->execute();
 	}
 
-	public function registrar($user, $lang, $passwd){
+	public function registrar($opc ,$user){
 		
 			$sql = $this->db->prepare("SELECT * FROM usuario WHERE user =".$user);
 			$sql->execute();
 			$much = array();
 			if($sql->rowCount() > 0){
 				
-				return "O usuário ja esta cadastrado";
+				return "Você ja esta cadastrado";
 			
 			}else{
+				try{
 
-				$sql = $this->db->prepare("INSERT INTO usuario SET user=:usr, senha=:passw, linguagem=:lang");
-				$sql->bindValue(":usr", $user);
-				$sql->bindValue(":passw", $lang);
-				$sql->bindValue(":lang", $passwd);
-				$sql->execute();
+					$sql = $this->db->prepare("INSERT INTO usuario SET user=:usr");
+					$sql->bindValue(":usr", $user);
+					$sql->execute();
+					return $opc["first_name"]." Cadastrado com sucesso";
 
-				return "Obrigado por se registrar. A mozDevs agradece...";
+				}catch(exception $e){
+					return "Volte a tentar mais tarde";
+				}
+	
 			}
 
 	}
 
-	public function lista ($linguagem, $tipo=null){
+	public function sendChatAction($opc, $action){
 
-		$sql = $this->db->prepare("SELECT * FROM usuario WHERE linguagem=:lang");
-		$sql->bindValue(":lang", $linguagem);
-		$sql->execute();
+		$parametro = [
 
-		$list = array();
+			"chat_id"=>$opc["chat_id"],
+			"action"=>$action
+		];
 
-		if($sql->rowCount() > 0){
-			$list = $sql->fetchAll();
+		$this->apiRequest("sendChatAction", $parametro);
+	}
+
+	public function description($opc){
+
+		try{
+
+			$sql = $this->db->prepare("UPDATE usuario SET description=:des WHERE user=:usr");
+			$sql->bindValue(":usr", $opc["first_name"]);
+			$sql->execute();
+
+		}catch(exception $e){
+			return "Desculpe. Tente mais tarde.";
 		}
 
-		return $list;
+	}
+
+	public function foreca($opc){
+
+		$array = array(
+			 "eu"=>"viado",
+			 "nos"=>"logo",
+			 "vamos"=>"ver"
+		);
+
+		foreach($array as $berg){
+
+			$this->sendMessage($opc, $berg);
+		}
 	}
 
 
