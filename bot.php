@@ -35,8 +35,8 @@
         
     }
     else if($opc["texto"] === "/tool"){
-        $motor->sendInline($opc, "Testando o callback", $strings->fala["botoes"]);
-        $motor->sendMessage($opc, $_SESSION['username']);
+        $motor->sendChatAction($opc, "typing");
+        $motor->foreca($opc);
     }
 
 ?>
