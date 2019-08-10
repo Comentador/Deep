@@ -31,12 +31,23 @@
     }
 
     if($opc['texto'] === "/start"){
-        $motor->sendMessage($opc, $opc['user']);
+
+        if($motor->verify($opc["first_name"]) == 1){
+            $motor->sendInline($opc, $strings->falas["welcome"] ,$motor->falas["menu"]);
+        }else{
+            $motor->sendInline($opc, "*Cadastre-se para poder desfrutar dos previlegios que a MozDevs fornece*", $motor->falas["cadastro"]);
+        }
+        
         
     }
     else if($opc["texto"] === "/tool"){
         $motor->sendChatAction($opc, "typing");
         $motor->foreca($opc);
+    }
+    else if($opc["texto"] === "Cadastrar"){
+        $motor->registrar($opc, $opc["first_name"]);
+        sleep(2);
+        $motor->sendInline($opc, $strings->falas["welcome"], $motor->falas["menu"]);
     }
 
 ?>
