@@ -10,7 +10,7 @@ class Divulga{
 		$this->str = new Strings();
 		try{
 
-			$this->db = new PDO("mysql:dbname=sendtomyemail;host=", "comentador", "humdados123456");
+			$this->db = new PDO("mysql:dbname=sendtomyemail;host=db4free.net", "comentador", "humdados123456");
 			
 
 		}catch(PDOexception $e){
@@ -136,6 +136,18 @@ class Divulga{
 
 	}
 
+	public function verify($user){
+
+		$sql = $this->db->prepare("SELECT * FROM usuario WHERE user =".$user);
+		$sql->execute();
+		$much;
+		if($sql->rowCount() > 0){
+			$much = 1;
+		}
+
+		return $much;
+	}
+
 	public function sendChatAction($opc, $action){
 
 		$parametro = [
@@ -161,19 +173,7 @@ class Divulga{
 
 	}
 
-	public function foreca($opc){
 
-		$array = array(
-			 "eu"=>"viado",
-			 "nos"=>"logo",
-			 "vamos"=>"ver"
-		);
-
-		foreach($array as $berg){
-
-			$this->sendMessage($opc, $berg);
-		}
-	}
 
 
 }
@@ -185,18 +185,10 @@ class Strings{
 		"primeira"=>"opa fion",
 		"menu"=>array(
 			"inline_keyboard"=>array(
-				array(array("text"=>"Registro", "callback_data"=>"reg")),
 				array(array("text"=>"Procurar", "callback_data"=>"search"), array("text"=>"Parceria", "callback_data"=>"parser")),
 				array(array("text"=>"Login", "callback_data"=>"log"), array("text"=>"Ferramentas", "callback_data"=>"tools")),
 				array(array("text"=>"Mais...", "callback_data"=>"me"))
 			),
-		),
-
-		"Registro"=>array(
-			"inline_keyboard"=>array(
-				array(array("text"=>"Programador", "callback_data"=>"coder"), array("text"=>"Cyber Sec", "callback_data"=>"sec")),
-				array(array("text"=>"Menu", "callback_data"=>"menu"))
-			)
 		),
 
 		"Ferramentas"=>array(
@@ -206,5 +198,14 @@ class Strings{
 
 			)
 		),
+
+		"cadastro"=>array(
+			"keyboard"=>array(
+				array("Cadastrar"),
+			)
+		),
+		
+
+		"welcome"=>"*Bem vindo ao Bot da MozDevs.\n Desfrute das ferramentas que eu forneço para ti.*",
 	);
 }
