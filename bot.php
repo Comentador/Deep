@@ -36,7 +36,7 @@
         if($motor->verify($opc["first_name"]) == 1){
             $motor->sendInline($opc, $strings->falas["welcome"] ,$motor->falas["menu"]);
         }else{
-            $motor->sendInline($opc, "*Cadastre-se para poder desfrutar dos previlegios que a MozDevs fornece*", $motor->falas["cadastro"]);
+            $motor->sendInline($opc, "*Cadastre-se para poder desfrutar dos previlegios que a MozDevs fornece*", $motor->falas["Ferramentas"]);
         }
 
         $motor->sendMessage($opc, "Pelomenos eu funciono");
